@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dengue-frontend
+  labels:
+    app: dengue-kg
+    component: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dengue-kg
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: dengue-kg
+        component: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: quay.io/wjackson/dengue-kg-frontend:latest
+        ports:
+        - containerPort: 8080 # Nginx container serves on 8080
+          protocol: TCP
+        # Add resource requests/limits

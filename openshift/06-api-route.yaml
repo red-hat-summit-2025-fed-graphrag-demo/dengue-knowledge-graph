@@ -1,0 +1,18 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: dengue-api
+  labels:
+    app: dengue-kg
+    component: api
+spec:
+  to:
+    kind: Service
+    name: dengue-api
+    weight: 100
+  port:
+    targetPort: http # Matches the name in the Service definition
+  tls:
+    termination: edge # Default OpenShift TLS termination
+    # insecureEdgeTerminationPolicy: Redirect # Optional: Redirect HTTP to HTTPS
+  wildcardPolicy: None

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: predictive-model-config
+data:
+  log-level: "info"
+  model-settings.json: |
+    {
+      "dengue_risk_classifier": {
+        "description": "Classifies dengue risk levels based on environmental factors",
+        "version": "1.0.0",
+        "threshold": "0.6"
+      },
+      "outbreak_predictor": {
+        "description": "Predicts probability of dengue outbreak in next 30 days",
+        "version": "1.0.0",
+        "threshold": "0.5"
+      }
+    }

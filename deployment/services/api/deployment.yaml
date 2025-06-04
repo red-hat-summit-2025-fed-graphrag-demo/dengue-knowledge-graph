@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dengue-api
+  labels:
+    app: dengue-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dengue-api
+  template:
+    metadata:
+      labels:
+        app: dengue-api
+    spec:
+      containers:
+      - name: api
+        image: quay.io/wjackson/dengue-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: NEO4J_URI
+          value: bolt://neo4j-dengue:7687
+        - name: NEO4J_USER
+          valueFrom:
+            secretKeyRef:
+              name: neo4j-credentials
+              key: username
+              optional: false
+        - name: NEO4J_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: neo4j-credentials
+              key: password
+              optional: false
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: dengue-api-config
+              key: log-level
+              optional: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10

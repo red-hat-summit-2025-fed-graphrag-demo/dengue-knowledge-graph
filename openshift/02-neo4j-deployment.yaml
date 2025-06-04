@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neo4j-dengue
+  labels:
+    app: dengue-kg
+    component: neo4j
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dengue-kg
+      component: neo4j
+  template:
+    metadata:
+      labels:
+        app: dengue-kg
+        component: neo4j
+    spec:
+      securityContext:
+        fsGroup: 7474
+        runAsUser: 7474
+      containers:
+      - name: neo4j
+        image: quay.io/wjackson/dengue-kg-neo4j:latest
+        ports:
+        - containerPort: 7474 # HTTP
+          protocol: TCP
+        - containerPort: 7687 # Bolt
+          protocol: TCP
+        env:
+        - name: NEO4J_AUTH
+          value: "none" # Simplifies initial setup, consider adding auth later
+        # Add resource requests/limits based on expected load
+        # resources:
+        #   requests:
+        #     memory: "2Gi"
+        #     cpu: "1"
+        #   limits:
+        #     memory: "4Gi"
+        #     cpu: "2"
+        volumeMounts:
+        - name: neo4j-data
+          mountPath: /data
+      volumes:
+      - name: neo4j-data
+        persistentVolumeClaim:
+          claimName: neo4j-dengue-data

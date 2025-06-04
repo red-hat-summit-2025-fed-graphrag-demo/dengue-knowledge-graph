@@ -1,0 +1,17 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: dengue-frontend
+  labels:
+    app: dengue-kg
+    component: frontend
+spec:
+  to:
+    kind: Service
+    name: dengue-frontend
+    weight: 100
+  port:
+    targetPort: http # Matches the name in the Service definition
+  tls:
+    termination: edge
+  wildcardPolicy: None

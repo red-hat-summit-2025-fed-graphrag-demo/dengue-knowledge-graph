@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dengue-frontend
+  labels:
+    app: dengue-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dengue-frontend
+  template:
+    metadata:
+      labels:
+        app: dengue-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: image-registry.openshift-image-registry.svc:5000/dengue-kg/dengue-frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: REACT_APP_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: dengue-frontend-config
+              key: api-url
+        - name: REACT_APP_GRAPH_URL
+          valueFrom:
+            configMapKeyRef:
+              name: dengue-frontend-config
+              key: graph-url
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "300m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+          timeoutSeconds: 3
+          periodSeconds: 10

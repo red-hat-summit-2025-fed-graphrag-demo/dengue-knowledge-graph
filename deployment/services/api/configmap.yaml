@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dengue-api-config
+data:
+  log-level: "info"
+  api-settings.json: |
+    {
+      "cors_origins": ["*"],
+      "rate_limit": {
+        "enabled": true,
+        "rate": 100,
+        "per_seconds": 60
+      },
+      "cache": {
+        "enabled": true,
+        "ttl_seconds": 300
+      }
+    }

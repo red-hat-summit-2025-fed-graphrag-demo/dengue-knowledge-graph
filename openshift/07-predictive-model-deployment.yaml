@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dengue-predictive-model
+  labels:
+    app: dengue-kg
+    component: predictive-model
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dengue-kg
+      component: predictive-model
+  template:
+    metadata:
+      labels:
+        app: dengue-kg
+        component: predictive-model
+    spec:
+      containers:
+      - name: predictive-model
+        image: quay.io/wjackson/dengue-kg-predictive-model:latest
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: NEO4J_URI
+          value: "bolt://neo4j-dengue:7687"
+        - name: NEO4J_USER
+          value: "neo4j"
+        - name: NEO4J_PASSWORD
+          value: ""
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: KNOWLEDGE_GRAPH_API
+          value: "http://dengue-api:8000" # Internal API service URL
+        - name: MODEL_PATH
+          value: "/opt/app-root/src/models" # Should match Containerfile
+        # Add resource requests/limits

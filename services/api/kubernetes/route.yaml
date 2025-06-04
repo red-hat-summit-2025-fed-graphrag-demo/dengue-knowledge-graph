@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: dengue-api
+  labels:
+    app: dengue-api
+spec:
+  host: dengue-api-neo4j-dengue-service.apps.cluster-8gvkk.8gvkk.sandbox888.opentlc.com
+  to:
+    kind: Service
+    name: dengue-api
+  port:
+    targetPort: http

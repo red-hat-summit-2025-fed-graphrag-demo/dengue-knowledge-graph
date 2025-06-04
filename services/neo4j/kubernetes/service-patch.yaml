@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: neo4j-dengue
+  namespace: neo4j-dengue-service
+spec:
+  selector:
+    app: dengue-kg
+    component: neo4j
+  ports:
+  - name: http
+    port: 7474
+    protocol: TCP
+    targetPort: 7474
+  - name: bolt
+    port: 7687
+    protocol: TCP
+    targetPort: 7687

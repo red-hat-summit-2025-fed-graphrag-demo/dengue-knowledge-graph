@@ -1,0 +1,642 @@
+{
+  "doc_type": "pipeline",
+  "version": "3.0",
+  "json_schema": "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json",
+  "id": "dengue-knowledge-graph-pipeline",
+  "primary_pipeline": "primary",
+  "pipelines": [
+    {
+      "id": "primary",
+      "nodes": [
+        {
+          "id": "db9d80c6-6b3c-474a-9b95-3d9a7f0c0e7a",
+          "type": "execution_node",
+          "op": "execute-python-node",
+          "app_data": {
+            "component_parameters": {
+              "dependencies": [],
+              "include_subdirectories": false,
+              "outputs": [],
+              "env_vars": [
+                {
+                  "env_var": "NEO4J_URI",
+                  "value": "bolt://localhost:7688"
+                },
+                {
+                  "env_var": "NEO4J_USER",
+                  "value": "neo4j"
+                },
+                {
+                  "env_var": "NEO4J_PASSWORD",
+                  "value": "denguePassw0rd!"
+                }
+              ],
+              "kubernetes_pod_annotations": [],
+              "kubernetes_pod_labels": [],
+              "kubernetes_secrets": [],
+              "kubernetes_shared_mem_size": {},
+              "kubernetes_tolerations": [],
+              "mounted_volumes": [],
+              "filename": "/services/neo4j/scripts/load-schema.py",
+              "runtime_image": "registry.access.redhat.com/ubi8/python-311:latest"
+            },
+            "label": "initialize_schema",
+            "ui_data": {
+              "label": "initialize_schema",
+              "image": "/static/elyra/python.svg",
+              "x_pos": 49,
+              "y_pos": 51,
+              "description": "Run Python script"
+            }
+          },
+          "inputs": [],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "6c91c75f-1c85-4b72-b3b3-92e44e8f75f8",
+          "type": "execution_node",
+          "op": "execute-python-node",
+          "app_data": {
+            "component_parameters": {
+              "dependencies": [],
+              "include_subdirectories": false,
+              "outputs": [],
+              "env_vars": [
+                {
+                  "env_var": "NEO4J_URI",
+                  "value": "bolt://localhost:7688"
+                },
+                {
+                  "env_var": "NEO4J_USER",
+                  "value": "neo4j"
+                },
+                {
+                  "env_var": "NEO4J_PASSWORD",
+                  "value": "denguePassw0rd!"
+                }
+              ],
+              "kubernetes_pod_annotations": [],
+              "kubernetes_pod_labels": [],
+              "kubernetes_secrets": [],
+              "kubernetes_shared_mem_size": {},
+              "kubernetes_tolerations": [],
+              "mounted_volumes": [],
+              "filename": "/services/neo4j/scripts/connect-dengue-symptoms.py",
+              "runtime_image": "registry.access.redhat.com/ubi8/python-311:latest"
+            },
+            "label": "connect_symptoms",
+            "ui_data": {
+              "label": "connect_symptoms",
+              "image": "/static/elyra/python.svg",
+              "x_pos": 50,
+              "y_pos": 150,
+              "description": "Run Python script"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "3aad5a4f-2ce4-488a-80e1-2b43a7c19dea",
+                  "node_id_ref": "db9d80c6-6b3c-474a-9b95-3d9a7f0c0e7a",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "8f1c9b58-412e-42d9-8319-9397ea72d7f4",
+          "type": "execution_node",
+          "op": "execute-python-node",
+          "app_data": {
+            "component_parameters": {
+              "dependencies": [],
+              "include_subdirectories": false,
+              "outputs": [],
+              "env_vars": [
+                {
+                  "env_var": "NEO4J_URI",
+                  "value": "bolt://localhost:7688"
+                },
+                {
+                  "env_var": "NEO4J_USER",
+                  "value": "neo4j"
+                },
+                {
+                  "env_var": "NEO4J_PASSWORD",
+                  "value": "denguePassw0rd!"
+                }
+              ],
+              "kubernetes_pod_annotations": [],
+              "kubernetes_pod_labels": [],
+              "kubernetes_secrets": [],
+              "kubernetes_shared_mem_size": {},
+              "kubernetes_tolerations": [],
+              "mounted_volumes": [],
+              "filename": "/services/neo4j/scripts/connect-diagnostic-tests.py",
+              "runtime_image": "registry.access.redhat.com/ubi8/python-311:latest"
+            },
+            "label": "connect_diagnostics",
+            "ui_data": {
+              "label": "connect_diagnostics",
+              "image": "/static/elyra/python.svg",
+              "x_pos": 50,
+              "y_pos": 250,
+              "description": "Run Python script"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "1fe8bdd4-5cc9-4dfb-8194-3e8b3a80f51a",
+                  "node_id_ref": "6c91c75f-1c85-4b72-b3b3-92e44e8f75f8",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "d16e4ebe-15a7-454e-8a62-74fc47d40fde",
+          "type": "execution_node",
+          "op": "execute-python-node",
+          "app_data": {
+            "component_parameters": {
+              "dependencies": [],
+              "include_subdirectories": false,
+              "outputs": [],
+              "env_vars": [
+                {
+                  "env_var": "NEO4J_URI",
+                  "value": "bolt://localhost:7688"
+                },
+                {
+                  "env_var": "NEO4J_USER",
+                  "value": "neo4j"
+                },
+                {
+                  "env_var": "NEO4J_PASSWORD",
+                  "value": "denguePassw0rd!"
+                }
+              ],
+              "kubernetes_pod_annotations": [],
+              "kubernetes_pod_labels": [],
+              "kubernetes_secrets": [],
+              "kubernetes_shared_mem_size": {},
+              "kubernetes_tolerations": [],
+              "mounted_volumes": [],
+              "filename": "/services/neo4j/scripts/connect-non-clinical-entities.py",
+              "runtime_image": "registry.access.redhat.com/ubi8/python-311:latest"
+            },
+            "label": "connect_nonclinical",
+            "ui_data": {
+              "label": "connect_nonclinical",
+              "image": "/static/elyra/python.svg",
+              "x_pos": 50,
+              "y_pos": 351,
+              "description": "Run Python script"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "a13afb12-d1f7-4bd2-82e4-5b8c1d53577c",
+                  "node_id_ref": "8f1c9b58-412e-42d9-8319-9397ea72d7f4",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "7c3f3a9d-a422-4f95-a26e-79d5e3a166d1",
+          "type": "execution_node",
+          "op": "execute-python-node",
+          "app_data": {
+            "component_parameters": {
+              "dependencies": [],
+              "include_subdirectories": false,
+              "outputs": [],
+              "env_vars": [
+                {
+                  "env_var": "NEO4J_URI",
+                  "value": "bolt://localhost:7688"
+                },
+                {
+                  "env_var": "NEO4J_USER",
+                  "value": "neo4j"
+                },
+                {
+                  "env_var": "NEO4J_PASSWORD",
+                  "value": "denguePassw0rd!"
+                }
+              ],
+              "kubernetes_pod_annotations": [],
+              "kubernetes_pod_labels": [],
+              "kubernetes_secrets": [],
+              "kubernetes_shared_mem_size": {},
+              "kubernetes_tolerations": [],
+              "mounted_volumes": [],
+              "filename": "/services/neo4j/scripts/connect-nodes-to-ontology.py",
+              "runtime_image": "registry.access.redhat.com/ubi8/python-311:latest"
+            },
+            "label": "connect_ontology",
+            "ui_data": {
+              "label": "connect_ontology",
+              "image": "/static/elyra/python.svg",
+              "x_pos": 50,
+              "y_pos": 450,
+              "description": "Run Python script"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "a5f2dff3-c4ef-483e-a7a1-1d23e1bdc0c9",
+                  "node_id_ref": "d16e4ebe-15a7-454e-8a62-74fc47d40fde",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "ab28f79e-97c8-453c-a2f5-1f35e9fb3f63",
+          "type": "execution_node",
+          "op": "execute-python-node",
+          "app_data": {
+            "component_parameters": {
+              "dependencies": [],
+              "include_subdirectories": false,
+              "outputs": [],
+              "env_vars": [
+                {
+                  "env_var": "NEO4J_URI",
+                  "value": "bolt://localhost:7688"
+                },
+                {
+                  "env_var": "NEO4J_USER",
+                  "value": "neo4j"
+                },
+                {
+                  "env_var": "NEO4J_PASSWORD",
+                  "value": "denguePassw0rd!"
+                }
+              ],
+              "kubernetes_pod_annotations": [],
+              "kubernetes_pod_labels": [],
+              "kubernetes_secrets": [],
+              "kubernetes_shared_mem_size": {},
+              "kubernetes_tolerations": [],
+              "mounted_volumes": [],
+              "filename": "/services/neo4j/scripts/add-references.py",
+              "runtime_image": "registry.access.redhat.com/ubi8/python-311:latest"
+            },
+            "label": "add_references",
+            "ui_data": {
+              "label": "add_references",
+              "image": "/static/elyra/python.svg",
+              "x_pos": 50,
+              "y_pos": 550,
+              "description": "Run Python script"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "0f9b7b9d-0ae5-49a5-a60f-ba4ebc1b0ac5",
+                  "node_id_ref": "7c3f3a9d-a422-4f95-a26e-79d5e3a166d1",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "e4a8c879-12c6-4f85-b7ba-aa8634a25c29",
+          "type": "execution_node",
+          "op": "execute-python-node",
+          "app_data": {
+            "component_parameters": {
+              "dependencies": [],
+              "include_subdirectories": false,
+              "outputs": [],
+              "env_vars": [
+                {
+                  "env_var": "NEO4J_URI",
+                  "value": "bolt://localhost:7688"
+                },
+                {
+                  "env_var": "NEO4J_USER",
+                  "value": "neo4j"
+                },
+                {
+                  "env_var": "NEO4J_PASSWORD",
+                  "value": "denguePassw0rd!"
+                }
+              ],
+              "kubernetes_pod_annotations": [],
+              "kubernetes_pod_labels": [],
+              "kubernetes_secrets": [],
+              "kubernetes_shared_mem_size": {},
+              "kubernetes_tolerations": [],
+              "mounted_volumes": [],
+              "filename": "/services/neo4j/pipeline/graph_coverage.py",
+              "runtime_image": "registry.access.redhat.com/ubi8/python-311:latest"
+            },
+            "label": "validate_graph",
+            "ui_data": {
+              "label": "validate_graph",
+              "image": "/static/elyra/python.svg",
+              "x_pos": 50,
+              "y_pos": 650,
+              "description": "Run Python script"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "dea2c2bd-4d0c-4d19-9591-9307f45cea95",
+                  "node_id_ref": "ab28f79e-97c8-453c-a2f5-1f35e9fb3f63",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "9b8231ed-6a65-465c-a8c4-5f0b4b9d89cc",
+          "type": "execution_node",
+          "op": "execute-python-node",
+          "app_data": {
+            "component_parameters": {
+              "dependencies": [],
+              "include_subdirectories": false,
+              "outputs": [],
+              "env_vars": [
+                {
+                  "env_var": "NEO4J_URI",
+                  "value": "bolt://localhost:7688"
+                },
+                {
+                  "env_var": "NEO4J_USER",
+                  "value": "neo4j"
+                },
+                {
+                  "env_var": "NEO4J_PASSWORD",
+                  "value": "denguePassw0rd!"
+                }
+              ],
+              "kubernetes_pod_annotations": [],
+              "kubernetes_pod_labels": [],
+              "kubernetes_secrets": [],
+              "kubernetes_shared_mem_size": {},
+              "kubernetes_tolerations": [],
+              "mounted_volumes": [],
+              "filename": "/services/neo4j/pipeline/api_test.py",
+              "runtime_image": "registry.access.redhat.com/ubi8/python-311:latest"
+            },
+            "label": "test_api",
+            "ui_data": {
+              "label": "test_api",
+              "image": "/static/elyra/python.svg",
+              "x_pos": 250,
+              "y_pos": 650,
+              "description": "Run Python script"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "0d2a9e77-5d54-42d2-bf34-c78a40617c4e",
+                  "node_id_ref": "ab28f79e-97c8-453c-a2f5-1f35e9fb3f63",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "app_data": {
+        "ui_data": {
+          "comments": [
+            {
+              "id": "d86ea118-bb8c-4fec-8e59-b3f26fd16e3e",
+              "x_pos": 250,
+              "y_pos": 50,
+              "width": 175,
+              "height": 42,
+              "content": "Neo4j Knowledge Graph Pipeline",
+              "associated_id_refs": []
+            }
+          ]
+        },
+        "version": 8,
+        "properties": {
+          "name": "container_paths",
+          "runtime": "Generic",
+          "description": "Pipeline for loading and validating the Dengue Knowledge Graph",
+          "pipeline_defaults": {
+            "kubernetes_shared_mem_size": {},
+            "mounted_volumes": [],
+            "kubernetes_tolerations": [],
+            "kubernetes_pod_annotations": [],
+            "kubernetes_pod_labels": [],
+            "kubernetes_secrets": [],
+            "env_vars": []
+          }
+        }
+      },
+      "runtime_ref": ""
+    }
+  ],
+  "schemas": []
+}

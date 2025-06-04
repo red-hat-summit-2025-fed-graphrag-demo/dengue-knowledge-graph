@@ -1,0 +1,174 @@
+{
+  "concepts": [
+    {
+      "id": "38362002",
+      "term": "Dengue fever",
+      "conceptType": "disorder",
+      "synonyms": ["Breakbone fever", "Dengue (disorder)"],
+      "definition": "A viral disorder transmitted by mosquitoes of the genus Aedes, especially Aedes aegypti. It is characterized by high fever, rash, headache, arthralgia, myalgia, and bone pain."
+    },
+    {
+      "id": "38362003",
+      "term": "Dengue hemorrhagic fever",
+      "conceptType": "disorder",
+      "synonyms": ["DHF", "Dengue haemorrhagic fever"],
+      "definition": "A severe form of dengue characterized by thrombocytopenia, increased vascular permeability, and hemorrhagic manifestations."
+    },
+    {
+      "id": "38362004",
+      "term": "Dengue shock syndrome",
+      "conceptType": "disorder",
+      "synonyms": ["DSS"],
+      "definition": "The most severe form of dengue hemorrhagic fever, characterized by circulatory failure manifested by rapid and weak pulse, narrow pulse pressure or hypotension, cold clammy skin, and altered mental status."
+    },
+    {
+      "id": "119200007",
+      "term": "Aedes",
+      "conceptType": "organism",
+      "synonyms": ["Aedes aegypti", "Aedes albopictus"],
+      "definition": "A genus of mosquitoes that can transmit yellow fever and dengue."
+    },
+    {
+      "id": "716917000",
+      "term": "NS1 antigen detection",
+      "conceptType": "procedure",
+      "synonyms": ["NS1 assay", "NS1 test"],
+      "definition": "Laboratory test for the detection of non-structural protein 1 of dengue virus."
+    },
+    {
+      "id": "708031005",
+      "term": "Polymerase chain reaction for Dengue virus",
+      "conceptType": "procedure",
+      "synonyms": ["PCR for DENV", "Dengue RT-PCR"],
+      "definition": "Molecular test to detect dengue virus RNA."
+    },
+    {
+      "id": "103693000",
+      "term": "Fever",
+      "conceptType": "finding",
+      "synonyms": ["Pyrexia", "Febrile"],
+      "definition": "Elevation of body temperature above the normal range."
+    },
+    {
+      "id": "25064002",
+      "term": "Headache",
+      "conceptType": "finding",
+      "synonyms": ["Cephalalgia", "Pain in head"],
+      "definition": "Pain in the head."
+    },
+    {
+      "id": "68962001",
+      "term": "Myalgia",
+      "conceptType": "finding",
+      "synonyms": ["Muscle pain", "Muscular pain"],
+      "definition": "Pain in a muscle or muscles."
+    },
+    {
+      "id": "271807003",
+      "term": "Rash",
+      "conceptType": "finding",
+      "synonyms": ["Eruption of skin", "Skin eruption"],
+      "definition": "Eruption on the skin."
+    },
+    {
+      "id": "16932000",
+      "term": "Nausea and vomiting",
+      "conceptType": "finding",
+      "synonyms": ["Sick", "Emesis"],
+      "definition": "Feeling of sickness with an inclination to vomit and the forcible expulsion of stomach contents through the mouth."
+    },
+    {
+      "id": "131148009",
+      "term": "Bleeding",
+      "conceptType": "finding",
+      "synonyms": ["Hemorrhage", "Haemorrhage"],
+      "definition": "Loss of blood from the vascular system."
+    },
+    {
+      "id": "8510008",
+      "term": "Reduced platelet count",
+      "conceptType": "finding",
+      "synonyms": ["Thrombocytopenia", "Low platelet count"],
+      "definition": "Decrease in the number of platelets in the blood."
+    },
+    {
+      "id": "422768004",
+      "term": "Fluid therapy",
+      "conceptType": "procedure",
+      "synonyms": ["Fluid replacement", "Hydration therapy"],
+      "definition": "Administration of fluid to replace body fluids or to treat dehydration."
+    }
+  ],
+  "relationships": [
+    {
+      "source": "38362003",
+      "target": "38362002",
+      "type": "Is a"
+    },
+    {
+      "source": "38362004",
+      "target": "38362003",
+      "type": "Is a"
+    },
+    {
+      "source": "38362002",
+      "target": "119200007",
+      "type": "Transmitted by"
+    },
+    {
+      "source": "38362002",
+      "target": "103693000",
+      "type": "Has manifestation"
+    },
+    {
+      "source": "38362002",
+      "target": "25064002",
+      "type": "Has manifestation"
+    },
+    {
+      "source": "38362002",
+      "target": "68962001",
+      "type": "Has manifestation"
+    },
+    {
+      "source": "38362002",
+      "target": "271807003",
+      "type": "Has manifestation"
+    },
+    {
+      "source": "38362002",
+      "target": "16932000",
+      "type": "Has manifestation"
+    },
+    {
+      "source": "38362003",
+      "target": "131148009",
+      "type": "Has manifestation"
+    },
+    {
+      "source": "38362003",
+      "target": "8510008",
+      "type": "Has manifestation"
+    },
+    {
+      "source": "38362002",
+      "target": "716917000",
+      "type": "May be diagnosed by"
+    },
+    {
+      "source": "38362002",
+      "target": "708031005",
+      "type": "May be diagnosed by"
+    },
+    {
+      "source": "38362002",
+      "target": "422768004",
+      "type": "May be treated by"
+    },
+    {
+      "source": "38362003",
+      "target": "422768004",
+      "type": "May be treated by"
+    }
+  ]
+}

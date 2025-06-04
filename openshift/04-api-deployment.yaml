@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dengue-api
+  labels:
+    app: dengue-kg
+    component: api
+spec:
+  replicas: 1 # Start with 1, can scale later
+  selector:
+    matchLabels:
+      app: dengue-kg
+      component: api
+  template:
+    metadata:
+      labels:
+        app: dengue-kg
+        component: api
+    spec:
+      containers:
+      - name: api
+        image: quay.io/wjackson/dengue-kg-api:latest
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        env:
+        - name: NEO4J_URI
+          value: "bolt://neo4j-dengue:7687" # Connect to internal Neo4j service
+        - name: NEO4J_USER
+          value: "neo4j" # Matches default user if NEO4J_AUTH=none
+        - name: NEO4J_PASSWORD
+          value: "" # Matches default password if NEO4J_AUTH=none
+        - name: LOG_LEVEL
+          value: "INFO"
+        # Add resource requests/limits

@@ -1,0 +1,17 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: dengue-predictive-model
+  labels:
+    app: dengue-kg
+    component: predictive-model
+spec:
+  to:
+    kind: Service
+    name: dengue-predictive-model
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  wildcardPolicy: None

@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: dengue-knowledge-graph
+  namespace: openshift-gitops
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: in-cluster
+        name: neo4j-service
+        repoURL: https://github.com/red-hat-summit-2025-fed-graphrag-demo/dengue-knowledge-graph.git
+        targetRevision: main
+        path: deployment/services/neo4j
+      - cluster: in-cluster
+        name: api-service
+        repoURL: https://github.com/red-hat-summit-2025-fed-graphrag-demo/dengue-knowledge-graph.git
+        targetRevision: main
+        path: deployment/services/api
+      - cluster: in-cluster
+        name: frontend-service
+        repoURL: https://github.com/red-hat-summit-2025-fed-graphrag-demo/dengue-knowledge-graph.git
+        targetRevision: main
+        path: deployment/services/frontend
+      - cluster: in-cluster
+        name: agent-workflow-service
+        repoURL: https://github.com/red-hat-summit-2025-fed-graphrag-demo/dengue-knowledge-graph.git
+        targetRevision: main
+        path: deployment/services/agent-workflow
+      - cluster: in-cluster
+        name: predictive-model-service
+        repoURL: https://github.com/red-hat-summit-2025-fed-graphrag-demo/dengue-knowledge-graph.git
+        targetRevision: main
+        path: deployment/services/predictive-model
+      - cluster: in-cluster
+        name: table-rag-service
+        repoURL: https://github.com/red-hat-summit-2025-fed-graphrag-demo/dengue-knowledge-graph.git
+        targetRevision: main
+        path: deployment/services/table-rag
+      - cluster: in-cluster
+        name: pipeline-definitions
+        repoURL: https://github.com/red-hat-summit-2025-fed-graphrag-demo/dengue-knowledge-graph.git
+        targetRevision: main
+        path: deployment/pipelines
+  template:
+    metadata:
+      name: '{{name}}'
+      namespace: openshift-gitops
+      labels:
+        component: dengue-knowledge-graph
+        purpose: '{{name}}'
+    spec:
+      project: default
+      source:
+        repoURL: '{{repoURL}}'
+        targetRevision: '{{targetRevision}}'
+        path: '{{path}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - RespectIgnoreDifferences=true

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: neo4j-dengue # This name is used by other services to connect
+  labels:
+    app: dengue-kg
+    component: neo4j
+spec:
+  selector:
+    app: dengue-kg
+    component: neo4j
+  ports:
+    - name: http
+      port: 7474
+      targetPort: 7474
+      protocol: TCP
+    - name: bolt
+      port: 7687
+      targetPort: 7687
+      protocol: TCP
+  type: ClusterIP # Internal only

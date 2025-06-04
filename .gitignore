@@ -1,0 +1,53 @@
+# Data files
+data/*
+!data/README.md
+
+# Database files
+**/neo4j-test-data/
+**/logs/
+
+# Credentials
+**/.env
+**/secrets/
+
+# Python
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.Python
+**/env/
+**/build/
+**/develop-eggs/
+**/dist/
+**/downloads/
+**/eggs/
+**/.eggs/
+**/lib/
+**/lib64/
+**/parts/
+**/sdist/
+**/var/
+**/wheels/
+**/*.egg-info/
+**/.installed.cfg
+**/*.egg
+
+# Jupyter
+**/.ipynb_checkpoints
+**/*.ipynb
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+/deployment/wjackson-secret.yml
+
+venv
+venv/
+venv/*
+
+
+local_dev_logs

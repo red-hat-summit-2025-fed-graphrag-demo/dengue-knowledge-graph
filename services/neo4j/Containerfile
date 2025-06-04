@@ -1,0 +1,90 @@
+# Use Red Hat Universal Base Image 9 as the base
+FROM registry.access.redhat.com/ubi9/ubi:latest
+
+# --- Metadata ---
+LABEL name="neo4j-dengue-graph" \
+      version="1.0" \
+      summary="Neo4j Community Edition on UBI9 for Dengue GraphRAG" \
+      description="Installs Neo4j Community Edition 5.x, Java 17, and dependencies on UBI9." \
+      maintainer="Your Name <your.email@example.com>"
+
+# --- Environment Variables ---
+# Set Neo4j Home directory
+ENV NEO4J_HOME=/var/lib/neo4j
+# Set Neo4j version (Update if necessary - check Neo4j website for latest 5.x Community tarball)
+ENV NEO4J_VERSION=5.21.0
+# Set Java version required by Neo4j
+ENV JAVA_VERSION=17
+# Set initial authentication (user/password). CHANGE THIS in production or via runtime env var!
+ENV NEO4J_AUTH=neo4j/denguePassw0rd!
+
+# --- System Setup & Dependencies ---
+USER root
+
+# Update system and install necessary packages
+# - java-17-openjdk-headless: Required Java runtime for Neo4j
+# - wget: To download Neo4j tarball
+# - tar: To extract the tarball
+# - procps-ng: Provides 'ps' command, sometimes useful for debugging
+# Clean up DNF cache afterwards
+RUN dnf update -y && \
+    dnf install -y java-${JAVA_VERSION}-openjdk-headless wget tar procps-ng && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+# Verify Java installation
+RUN java -version
+
+# --- Neo4j Installation ---
+# Download Neo4j Community Edition tarball
+RUN wget --no-verbose --show-progress -O /tmp/neo4j.tar.gz "https://dist.neo4j.org/neo4j-community-${NEO4J_VERSION}-unix.tar.gz"
+
+# Create Neo4j user and group (important for security and OpenShift compatibility)
+# Using UID/GID common in base images, adjust if needed for specific environments
+RUN groupadd --gid 7474 neo4j && \
+    useradd --uid 7474 --gid 7474 --home-dir ${NEO4J_HOME} --shell /bin/bash neo4j
+
+# Create Neo4j directories and extract
+RUN mkdir -p ${NEO4J_HOME} /data /logs && \
+    tar -xzf /tmp/neo4j.tar.gz -C /tmp && \
+    mv /tmp/neo4j-community-${NEO4J_VERSION}/* ${NEO4J_HOME}/ && \
+    rm /tmp/neo4j.tar.gz && \
+    rm -rf /tmp/neo4j-community-${NEO4J_VERSION}
+
+# Adjust Neo4j configuration for container environment
+# - Allow connections from any interface (0.0.0.0) for HTTP and Bolt
+# - Disable initial password reset prompt (handled by NEO4J_AUTH)
+# - Point data and logs directories to the volumes
+RUN sed -i 's/#server.default_listen_address=0.0.0.0/server.default_listen_address=0.0.0.0/' ${NEO4J_HOME}/conf/neo4j.conf && \
+    sed -i 's/#server.bolt.listen_address=:7687/server.bolt.listen_address=:7687/' ${NEO4J_HOME}/conf/neo4j.conf && \
+    sed -i 's/#server.http.listen_address=:7474/server.http.listen_address=:7474/' ${NEO4J_HOME}/conf/neo4j.conf && \
+    sed -i 's/#dbms.security.auth_enabled=false/dbms.security.auth_enabled=true/' ${NEO4J_HOME}/conf/neo4j.conf && \
+    sed -i 's|#server.directories.data=data|server.directories.data=/data|' ${NEO4J_HOME}/conf/neo4j.conf && \
+    sed -i 's|#server.directories.logs=logs|server.directories.logs=/logs|' ${NEO4J_HOME}/conf/neo4j.conf && \
+    echo "server.config.strict_validation.enabled=false" >> ${NEO4J_HOME}/conf/neo4j.conf
+
+# --- Permissions ---
+# Set ownership for Neo4j directories to the neo4j user/group
+# This is crucial for running as non-root and for OpenShift compatibility
+RUN chown -R neo4j:neo4j ${NEO4J_HOME} /data /logs && \
+    chmod -R 700 ${NEO4J_HOME} /data /logs
+
+# --- Ports ---
+# Expose default Neo4j ports
+# 7474: HTTP (Neo4j Browser, REST API)
+# 7687: Bolt (Primary driver protocol)
+EXPOSE 7474 7687
+
+# --- Volumes ---
+# Define mount points for persistent data and logs
+VOLUME ["/data", "/logs"]
+
+# --- Runtime ---
+# Switch to the non-root neo4j user
+USER neo4j
+
+# Set working directory
+WORKDIR ${NEO4J_HOME}
+
+# Default command to start Neo4j
+CMD ["bin/neo4j", "console"]

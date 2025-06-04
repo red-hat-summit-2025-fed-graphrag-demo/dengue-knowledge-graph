@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dengue-frontend-config
+data:
+  api-url: "https://dengue-api.apps.cluster.example.com"
+  graph-url: "https://dengue-api.apps.cluster.example.com/graph"
+  environment: "production"
+  features.json: |
+    {
+      "enableGraphExploration": true,
+      "enableDataUpload": true,
+      "enableAgentWorkflows": true,
+      "enablePredictiveModels": true
+    }

@@ -1,0 +1,36 @@
+# Use Red Hat Universal Base Image 9 with Python 3.11 as the base
+FROM registry.access.redhat.com/ubi9/python-311:latest
+
+# --- Metadata ---
+LABEL name="dengue-kg-api" \
+      version="1.0" \
+      summary="FastAPI service for Dengue Knowledge Graph" \
+      description="Provides REST API access to the Neo4j-based Dengue Knowledge Graph" \
+      maintainer="Your Name <your.email@example.com>"
+
+# Set work directory
+WORKDIR /app
+
+# Copy requirements first for better layer caching
+COPY requirements.txt .
+
+# Install dependencies with pip
+# Using pip install with exact versions (as per project dependency guidelines)
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY app /app/app
+
+# Expose port for API
+EXPOSE 8000
+
+# Environment Variables
+ENV PYTHONPATH=/app
+ENV NEO4J_URI="bolt://neo4j-dengue:7687" \
+    NEO4J_USER="neo4j" \
+    NEO4J_PASSWORD="neo4j" \
+    NEO4J_AUTH="basic" \
+    LOG_LEVEL="info"
+
+# Run the FastAPI application with Uvicorn
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: neo4j-config
+data:
+  neo4j.custom.conf: |
+    # Neo4j Custom Configuration for Dengue Knowledge Graph
+    
+    # Performance tuning
+    dbms.memory.heap.initial_size=1G
+    dbms.memory.heap.max_size=2G
+    dbms.memory.pagecache.size=1G
+    
+    # Connection settings
+    dbms.connector.bolt.listen_address=0.0.0.0:7687
+    dbms.connector.http.listen_address=0.0.0.0:7474
+    
+    # Security settings
+    dbms.security.procedures.unrestricted=apoc.*
+    
+    # Logging configuration
+    dbms.logs.query.enabled=true
+    dbms.logs.query.rotation.keep_number=7
+    dbms.logs.query.rotation.size=20m
+    
+    # Enable APOC and Graph Data Science procedures
+    dbms.security.procedures.allowlist=apoc.*,gds.*
+    
+    # Set transaction timeout to accommodate long-running graph algorithms
+    dbms.transaction.timeout=300s
